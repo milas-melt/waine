@@ -1,5 +1,4 @@
 // express server handling api request coming in and response back with JSOn object, using body parser and corse
-require("dotenv").config();
 const OpenAI = require("openai");
 const { Configuration, OpenAIApi } = OpenAI;
 
@@ -8,7 +7,6 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 const port = 3001;
-
 const configuration = new Configuration({
     organization: "org-74UZmc6eelGAYrAIJ6Fkb6Zn",
     apiKey: process.env.OPENAI_API_KEY,
