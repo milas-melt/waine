@@ -1,5 +1,5 @@
 // express server handling api request coming in and response back with JSOn object, using body parser and corse
-
+require("dotenv").config();
 const OpenAI = require("openai");
 const { Configuration, OpenAIApi } = OpenAI;
 
