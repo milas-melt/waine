@@ -1,18 +1,41 @@
 // create a react component that inputd a text area messaage then performs a fetch request to localhost 3001 gets back a response as a data.message and displays that message in a box below
 import React, { useState } from "react";
 import "./App.css";
+// design imports
+import { Fragment } from "react";
+import { Disclosure, Menu, Transition } from "@headlessui/react";
+import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 function App() {
     const [message, setMessage] = useState("");
     const [response, setResponse] = useState("");
 
-    const stats = [
-        { label: "Founded", value: "2021" },
-        { label: "Employees", value: "5" },
-        { label: "Beta Users", value: "521" },
-        { label: "Raised", value: "$25M" },
+    // ui consts
+    const user = {
+        name: "Tom Cook",
+        email: "tom@example.com",
+        imageUrl:
+            "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    };
+    const navigation = [
+        { name: "Dashboard", href: "#", current: true },
+        { name: "Restaurants", href: "#", current: false },
+        { name: "Reservations", href: "#", current: false },
+        { name: "Favourite Wines", href: "#", current: false },
+        { name: "Friends", href: "#", current: false },
+    ];
+    const userNavigation = [
+        { name: "Your Profile", href: "#" },
+        { name: "Settings", href: "#" },
+        { name: "Sign out", href: "#" },
     ];
 
+    // ui function
+    function classNames(...classes) {
+        return classes.filter(Boolean).join(" ");
+    }
+
+    // OpenAI API call submit form
     const handleSubmit = (e) => {
         e.preventDefault();
         fetch("http://localhost:3001/", {
@@ -26,159 +49,279 @@ function App() {
             .then((data) => setResponse(data.message));
     };
     return (
-        <div className="relative bg-white py-16 sm:py-24">
-            <div className="lg:mx-auto lg:grid lg:max-w-7xl lg:grid-cols-2 lg:items-start lg:gap-24 lg:px-8">
-                <div className="relative sm:py-16 lg:py-0">
-                    <div
-                        aria-hidden="true"
-                        className="hidden sm:block lg:absolute lg:inset-y-0 lg:right-0 lg:w-screen"
-                    >
-                        <div className="absolute inset-y-0 right-1/2 w-full rounded-r-3xl bg-gray-50 lg:right-72" />
-                        <svg
-                            className="absolute top-8 left-1/2 -ml-3 lg:-right-8 lg:left-auto lg:top-12"
-                            width={404}
-                            height={392}
-                            fill="none"
-                            viewBox="0 0 404 392"
-                        >
-                            <defs>
-                                <pattern
-                                    id="02f20b47-fd69-4224-a62a-4c9de5c763f7"
-                                    x={0}
-                                    y={0}
-                                    width={20}
-                                    height={20}
-                                    patternUnits="userSpaceOnUse"
-                                >
-                                    <rect
-                                        x={0}
-                                        y={0}
-                                        width={4}
-                                        height={4}
-                                        className="text-gray-200"
-                                        fill="currentColor"
-                                    />
-                                </pattern>
-                            </defs>
-                            <rect
-                                width={404}
-                                height={392}
-                                fill="url(#02f20b47-fd69-4224-a62a-4c9de5c763f7)"
-                            />
-                        </svg>
-                    </div>
-                    <div className="relative mx-auto max-w-md px-6 sm:max-w-3xl lg:max-w-none lg:px-0 lg:py-20">
-                        {/* Testimonial card*/}
-                        <div className="relative overflow-hidden rounded-2xl pt-64 pb-10 shadow-xl">
-                            <img
-                                className="absolute inset-0 h-full w-full object-cover"
-                                src="https://images.unsplash.com/photo-1521510895919-46920266ddb3?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&fp-x=0.5&fp-y=0.6&fp-z=3&width=1440&height=1440&sat=-100"
-                                alt=""
-                            />
-                            <div className="absolute inset-0 bg-indigo-500 mix-blend-multiply" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-indigo-600 via-indigo-600 opacity-90" />
-                            <div className="relative px-8">
-                                <div>
-                                    <img
-                                        className="h-12"
-                                        src="https://tailwindui.com/img/logos/workcation.svg?color=white"
-                                        alt="Workcation"
-                                    />
-                                </div>
-                                <blockquote className="mt-8">
-                                    <div className="relative text-lg font-medium text-white md:flex-grow">
-                                        <svg
-                                            className="absolute top-0 left-0 h-8 w-8 -translate-x-3 -translate-y-2 transform text-indigo-400"
-                                            fill="currentColor"
-                                            viewBox="0 0 32 32"
-                                            aria-hidden="true"
-                                        >
-                                            <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
-                                        </svg>
-                                        <p className="relative">
-                                            Tincidunt integer commodo, cursus
-                                            etiam aliquam neque, et. Consectetur
-                                            pretium in volutpat, diam. Montes,
-                                            magna cursus nulla feugiat dignissim
-                                            id lobortis amet.
-                                        </p>
-                                    </div>
+        <div className="App">
+            <div className="min-h-full">
+                <div className="bg-gray-800 pb-32">
+                    <Disclosure as="nav" className="bg-gray-800">
+                        {({ open }) => (
+                            <>
+                                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                                    <div className="border-b border-gray-700">
+                                        <div className="flex h-16 items-center justify-between px-4 sm:px-0">
+                                            <div className="flex items-center">
+                                                <div className="flex-shrink-0">
+                                                    <img
+                                                        className="h-8 w-8"
+                                                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                                                        alt="Your Company"
+                                                    />
+                                                </div>
+                                                <div className="hidden md:block">
+                                                    <div className="ml-10 flex items-baseline space-x-4">
+                                                        {navigation.map(
+                                                            (item) => (
+                                                                <a
+                                                                    key={
+                                                                        item.name
+                                                                    }
+                                                                    href={
+                                                                        item.href
+                                                                    }
+                                                                    className={classNames(
+                                                                        item.current
+                                                                            ? "bg-gray-900 text-white"
+                                                                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                                                                        "px-3 py-2 rounded-md text-sm font-medium"
+                                                                    )}
+                                                                    aria-current={
+                                                                        item.current
+                                                                            ? "page"
+                                                                            : undefined
+                                                                    }
+                                                                >
+                                                                    {item.name}
+                                                                </a>
+                                                            )
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="hidden md:block">
+                                                <div className="ml-4 flex items-center md:ml-6">
+                                                    <button
+                                                        type="button"
+                                                        className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                                                    >
+                                                        <span className="sr-only">
+                                                            View notifications
+                                                        </span>
+                                                        <BellIcon
+                                                            className="h-6 w-6"
+                                                            aria-hidden="true"
+                                                        />
+                                                    </button>
 
-                                    <footer className="mt-4">
-                                        <p className="text-base font-semibold text-indigo-200">
-                                            Sarah Williams, CEO at Workcation
-                                        </p>
-                                    </footer>
-                                </blockquote>
+                                                    {/* Profile dropdown */}
+                                                    <Menu
+                                                        as="div"
+                                                        className="relative ml-3"
+                                                    >
+                                                        <div>
+                                                            <Menu.Button className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                                                                <span className="sr-only">
+                                                                    Open user
+                                                                    menu
+                                                                </span>
+                                                                <img
+                                                                    className="h-8 w-8 rounded-full"
+                                                                    src={
+                                                                        user.imageUrl
+                                                                    }
+                                                                    alt=""
+                                                                />
+                                                            </Menu.Button>
+                                                        </div>
+                                                        <Transition
+                                                            as={Fragment}
+                                                            enter="transition ease-out duration-100"
+                                                            enterFrom="transform opacity-0 scale-95"
+                                                            enterTo="transform opacity-100 scale-100"
+                                                            leave="transition ease-in duration-75"
+                                                            leaveFrom="transform opacity-100 scale-100"
+                                                            leaveTo="transform opacity-0 scale-95"
+                                                        >
+                                                            <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                                {userNavigation.map(
+                                                                    (item) => (
+                                                                        <Menu.Item
+                                                                            key={
+                                                                                item.name
+                                                                            }
+                                                                        >
+                                                                            {({
+                                                                                active,
+                                                                            }) => (
+                                                                                <a
+                                                                                    href={
+                                                                                        item.href
+                                                                                    }
+                                                                                    className={classNames(
+                                                                                        active
+                                                                                            ? "bg-gray-100"
+                                                                                            : "",
+                                                                                        "block px-4 py-2 text-sm text-gray-700"
+                                                                                    )}
+                                                                                >
+                                                                                    {
+                                                                                        item.name
+                                                                                    }
+                                                                                </a>
+                                                                            )}
+                                                                        </Menu.Item>
+                                                                    )
+                                                                )}
+                                                            </Menu.Items>
+                                                        </Transition>
+                                                    </Menu>
+                                                </div>
+                                            </div>
+                                            <div className="-mr-2 flex md:hidden">
+                                                {/* Mobile menu button */}
+                                                <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                                                    <span className="sr-only">
+                                                        Open main menu
+                                                    </span>
+                                                    {open ? (
+                                                        <XMarkIcon
+                                                            className="block h-6 w-6"
+                                                            aria-hidden="true"
+                                                        />
+                                                    ) : (
+                                                        <Bars3Icon
+                                                            className="block h-6 w-6"
+                                                            aria-hidden="true"
+                                                        />
+                                                    )}
+                                                </Disclosure.Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <Disclosure.Panel className="border-b border-gray-700 md:hidden">
+                                    <div className="space-y-1 px-2 py-3 sm:px-3">
+                                        {navigation.map((item) => (
+                                            <Disclosure.Button
+                                                key={item.name}
+                                                as="a"
+                                                href={item.href}
+                                                className={classNames(
+                                                    item.current
+                                                        ? "bg-gray-900 text-white"
+                                                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                                                    "block px-3 py-2 rounded-md text-base font-medium"
+                                                )}
+                                                aria-current={
+                                                    item.current
+                                                        ? "page"
+                                                        : undefined
+                                                }
+                                            >
+                                                {item.name}
+                                            </Disclosure.Button>
+                                        ))}
+                                    </div>
+                                    <div className="border-t border-gray-700 pt-4 pb-3">
+                                        <div className="flex items-center px-5">
+                                            <div className="flex-shrink-0">
+                                                <img
+                                                    className="h-10 w-10 rounded-full"
+                                                    src={user.imageUrl}
+                                                    alt=""
+                                                />
+                                            </div>
+                                            <div className="ml-3">
+                                                <div className="text-base font-medium leading-none text-white">
+                                                    {user.name}
+                                                </div>
+                                                <div className="text-sm font-medium leading-none text-gray-400">
+                                                    {user.email}
+                                                </div>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                className="ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                                            >
+                                                <span className="sr-only">
+                                                    View notifications
+                                                </span>
+                                                <BellIcon
+                                                    className="h-6 w-6"
+                                                    aria-hidden="true"
+                                                />
+                                            </button>
+                                        </div>
+                                        <div className="mt-3 space-y-1 px-2">
+                                            {userNavigation.map((item) => (
+                                                <Disclosure.Button
+                                                    key={item.name}
+                                                    as="a"
+                                                    href={item.href}
+                                                    className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                                                >
+                                                    {item.name}
+                                                </Disclosure.Button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </Disclosure.Panel>
+                            </>
+                        )}
+                    </Disclosure>
+                    <header className="py-10">
+                        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                            <h1 className="text-3xl font-bold tracking-tight text-white">
+                                AI Powered Sommelier
+                            </h1>
+                        </div>
+                    </header>
+                </div>
+
+                <main className="-mt-32">
+                    <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+                        {/* Replace with your content */}
+                        <div className="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+                            <div className="h-96 rounded-lg ">
+                                {/* START ==== CHAT ROOM */}
+                                <form onSubmit={handleSubmit}>
+                                    <label
+                                        htmlFor="comment"
+                                        className="block text-sm font-medium text-gray-700"
+                                    >
+                                        What are you eating?
+                                    </label>
+                                    <div className="mt-1">
+                                        <textarea
+                                            rows={4}
+                                            name="comment"
+                                            id="comment"
+                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                            value={message}
+                                            onChange={(e) =>
+                                                setMessage(e.target.value)
+                                            }
+                                        ></textarea>
+                                    </div>
+                                    <div className="flex-shrink-0">
+                                        <button
+                                            type="submit"
+                                            className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                        >
+                                            Post
+                                        </button>
+                                    </div>
+                                </form>
+                                {response && (
+                                    <div>
+                                        <b>Sommelier:</b> {response}
+                                    </div>
+                                )}
+                                {/* /END ==== CHAT ROOM */}
                             </div>
                         </div>
+                        {/* /End replace */}
                     </div>
-                </div>
-
-                <div className="relative mx-auto max-w-md px-6 sm:max-w-3xl lg:px-0">
-                    {/* Content area */}
-                    <div className="pt-12 sm:pt-16 lg:pt-20">
-                        <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                            On a mission to empower teams
-                        </h2>
-                        <div className="mt-6 space-y-6 text-gray-500">
-                            <p className="text-lg">
-                                Sagittis scelerisque nulla cursus in enim
-                                consectetur quam. Dictum urna sed consectetur
-                                neque tristique pellentesque. Blandit amet, sed
-                                aenean erat arcu morbi. Cursus faucibus nunc
-                                nisl netus morbi vel porttitor vitae ut. Amet
-                                vitae fames senectus vitae.
-                            </p>
-                            <p className="text-base leading-7">
-                                Sollicitudin tristique eros erat odio sed vitae,
-                                consequat turpis elementum. Lorem nibh vel, eget
-                                pretium arcu vitae. Eros eu viverra donec ut
-                                volutpat donec laoreet quam urna. Sollicitudin
-                                tristique eros erat odio sed vitae, consequat
-                                turpis elementum. Lorem nibh vel, eget pretium
-                                arcu vitae. Eros eu viverra donec ut volutpat
-                                donec laoreet quam urna.
-                            </p>
-                            <p className="text-base leading-7">
-                                Rhoncus nisl, libero egestas diam fermentum dui.
-                                At quis tincidunt vel ultricies. Vulputate
-                                aliquet velit faucibus semper. Pellentesque in
-                                venenatis vestibulum consectetur nibh id. In id
-                                ut tempus egestas. Enim sit aliquam nec, a.
-                                Morbi enim fermentum lacus in. Viverra.
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Stats section */}
-                    <div className="mt-10">
-                        <dl className="grid grid-cols-2 gap-x-4 gap-y-8">
-                            {stats.map((stat) => (
-                                <div
-                                    key={stat.label}
-                                    className="border-t-2 border-gray-100 pt-6"
-                                >
-                                    <dt className="text-base font-medium text-gray-500">
-                                        {stat.label}
-                                    </dt>
-                                    <dd className="text-3xl font-bold tracking-tight text-gray-900">
-                                        {stat.value}
-                                    </dd>
-                                </div>
-                            ))}
-                        </dl>
-                        <div className="mt-10">
-                            <a
-                                href="#"
-                                className="text-base font-medium text-indigo-600"
-                            >
-                                Learn more about how we're changing the world
-                                <span aria-hidden="true"> &rarr;</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                </main>
             </div>
         </div>
     );
